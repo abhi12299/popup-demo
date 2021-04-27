@@ -1,7 +1,12 @@
-<h1>Popup Login Demo</h1>
-
-<button onclick="openPopup()" id="openPopupBtn">Click to Login</button>
-<p id="status"></p>
+<div class="wrapper fadeInDown">
+  <div id="formContent">
+    <h2 class="active">JS Popup Demo</h2>
+    <input type="submit" class="fadeIn fourth" value="Click to Login" id="openPopupBtn" onclick="openPopup()">
+    <div id="formFooter">
+      <p id="status"></p>
+    </div>
+  </div>
+</div>
 
 <script>
   const popupBtn = document.querySelector('#openPopupBtn')
@@ -13,6 +18,7 @@
       alert('A popup is already open!')
       return
     }
+    localStorage.removeItem('status')
     statusArea.innerText = ''
     const params = `scrollbars=no,resizable=no,status=no,location=no,toolbar=no,menubar=no,
 width=0,height=0,left=-1000,top=-1000`
