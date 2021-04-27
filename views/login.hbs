@@ -1,0 +1,49 @@
+<div class="page">
+  <div class="container">
+    <div class="left">
+      <div class="login">Login</div>
+    </div>
+    <div class="right">
+      <div class="form">
+        <label for="email">Email</label>
+        <input type="email" id="email">
+        <label for="password">Password</label>
+        <input type="password" id="password">
+        <input type="submit" id="submit" value="Submit" onclick="login()">
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  if (window.opener) {
+    window.onbeforeunload = window.opener.popupClosed
+  }
+  async function login() {
+    const email = document.querySelector('#email').value
+    const password = document.querySelector('#password').value
+    const submitBtn = document.querySelector('#submit')
+
+    if (!email) {
+      window.alert('Email cannot be empty!')
+      return
+    }
+    try {
+      submitBtn.setAttribute('disabled', 'true')
+      await fetch('/users/login', {
+        method: 'POST',
+        body: JSON.stringify({ email, password }),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+      localStorage.setItem('status', 'success')
+      window.close()
+    } catch(error) {
+      // handle error here
+      // localStorage.setItem('status', 'error')
+    } finally {
+      submitBtn.removeAttribute('disabled')
+    }
+  }
+</script>

@@ -1,0 +1,54 @@
+<h1>Popup Login Demo</h1>
+
+<button onclick="openPopup()" id="openPopupBtn">Click to Login</button>
+<p id="status"></p>
+
+<script>
+  const popupBtn = document.querySelector('#openPopupBtn')
+  const statusArea = document.querySelector('#status')
+  let loginPopup
+
+  function openPopup() {
+    if (loginPopup && !loginPopup.closed) {
+      alert('A popup is already open!')
+      return
+    }
+    statusArea.innerText = ''
+    const params = `scrollbars=no,resizable=no,status=no,location=no,toolbar=no,menubar=no,
+width=0,height=0,left=-1000,top=-1000`
+    loginPopup = window.open('/login', 'Login', params)
+  }
+
+  // called when popup closes
+  function popupClosed() {
+    const status = localStorage.getItem('status')
+    if (status === 'success') {
+      initLogin()
+    } else {
+      alert('Popup was closed!')
+    }
+  }
+
+  async function initLogin() {
+    try {
+      popupBtn.innerText = 'Loading...'
+      popupBtn.setAttribute('disabled', 'true')
+      const resp = await fetch('/users/me', {
+        credentials: 'include'
+      })
+      if (resp.status !== 200) {
+        throw new Error('error while logging in!')
+      }
+      const json = await resp.json()
+      const { email } = json
+      statusArea.innerText = `You are logged in as ${email}!`
+    } catch(err) {
+      console.error(err)
+    } finally {
+      setTimeout(() => {
+        popupBtn.removeAttribute('disabled')
+        popupBtn.innerText = 'Click to Login'
+      }, 1000)
+    }
+  }
+</script>
