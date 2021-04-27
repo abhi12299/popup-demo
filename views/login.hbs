@@ -16,6 +16,7 @@
 <script>
   if (window.opener) {
     window.onbeforeunload = window.opener.popupClosed
+    window.onunload = window.onbeforeunload
   }
   const form = document.querySelector('form')
   form.addEventListener('submit', async e => {
